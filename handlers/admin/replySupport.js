@@ -21,12 +21,16 @@ bot.on('message', async (msg) => {
         }
 
         const supportAnswer = `📨 Новое сообщение от тех. поддержки:\n\n❓Вопрос:\n<i>${userQuestion}</i>\n\n✅ Ответ:\n${messageText}`;
-        await bot.sendMessage(msg.reply_to_message.forward_from.id, supportAnswer, { parse_mode: 'HTML' });
-
-        if (msg.photo && msg.photo.length > 0) {
+        if(msg?.reply_to_message.forward_from?.id) {
+            await bot.sendMessage(msg.reply_to_message.forward_from.id, supportAnswer, { parse_mode: 'HTML' });
+            
+            if (msg.photo && msg.photo.length > 0) {
             await bot.sendPhoto(msg.chat.id, msg.photo[0].file_id, { caption: msg.caption });
-        }
+            }
 
-        await bot.sendMessage(msg.chat.id, "Ответ успешно отправлен.✉️");
+            await bot.sendMessage(msg.chat.id, "Ответ успешно отправлен.✉️");
+        } else {
+            await bot.sendMessage(msg.chat.id, "Аккаунт пользователя закрыт. Воспользуйтесь командой /direct, чтобы отправить ответ.");
+        }
     }
 });

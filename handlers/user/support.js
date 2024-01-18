@@ -66,14 +66,17 @@ bot.on("callback_query", async (callbackQuery) => {
 
 bot.on("message", async (msg) => {
   if (userState[msg.from.id] === SupportStates.send_message_support) {
-    const text = `📨 Новый вопрос!\n ID юзера: <b>${msg.from.id}</b>\n Вопрос:\n`;
+    if(msg.text === '/start') {
+      delete userState[msg.from.id];
+      return;
+    }
+
+    const text = `📨 Новый вопрос!\n ID юзера: <code>${msg.from.id}</code>\n Ответить в директ: <code>/direct ${msg.from.id}</code>\n Вопрос:\n`;
     await bot.sendMessage(config.GROUP_ID, text, { parse_mode: "HTML" });
     await bot.forwardMessage(config.GROUP_ID, msg.from.id, msg.message_id);
     await bot.sendMessage(
       msg.chat.id,
       "Ваше сообщение отправлено.✉️ Ожидайте ответа."
     );
-
-    delete userState[msg.from.id];
   }
 });
