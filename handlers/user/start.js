@@ -7,6 +7,23 @@ const { checkUserBanned } = require("../../functions/checkUserAccess.js");
 const { get_connection } = require("../../functions/dbConnection.js");
 const { bot } = require("../../loader.js");
 
+const BASIC_COMMANDS = ["/start", "/ban", "/direct", "/unblock"];
+
+bot.on("message", async (msg) => {
+  if (BASIC_COMMANDS.find((command) => msg.text.includes(command))) {
+    return;
+  }
+  const userId = msg.from.id;
+  const startInfo = await fetchSectionInfo("start");
+  let caption = startInfo.content;
+  let replyMarkup = getStartKeyboard(userId);
+
+  await bot.sendPhoto(userId, startInfo.img_id, {
+    caption: caption,
+    reply_markup: replyMarkup,
+  });
+});
+
 bot.onText(/\/start(.*)/, async (msg, match) => {
   const userId = msg.from.id;
   const startInfo = await fetchSectionInfo("start");
