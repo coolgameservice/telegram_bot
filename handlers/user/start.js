@@ -11,8 +11,6 @@ const { getCurrentState, SupportStates } = require("./support.js");
 const BASIC_COMMANDS = ["/start", "/ban", "/direct", "/unblock"];
 
 bot.on("message", async (msg) => {
-  console.log(msg.from.id);
-  console.log(getCurrentState());
   if (BASIC_COMMANDS.find((command) => msg.text.includes(command)) || getCurrentState()[msg.from.id] === SupportStates.send_message_support) {
     return;
   }
