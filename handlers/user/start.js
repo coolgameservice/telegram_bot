@@ -6,11 +6,14 @@ const { fetchSectionInfo } = require("../../functions/fetchSectionInfo.js");
 const { checkUserBanned } = require("../../functions/checkUserAccess.js");
 const { get_connection } = require("../../functions/dbConnection.js");
 const { bot } = require("../../loader.js");
+const { getCurrentState, SupportStates } = require("./support.js");
 
 const BASIC_COMMANDS = ["/start", "/ban", "/direct", "/unblock"];
 
 bot.on("message", async (msg) => {
-  if (BASIC_COMMANDS.find((command) => msg.text.includes(command))) {
+  console.log(msg.from.id);
+  console.log(getCurrentState());
+  if (BASIC_COMMANDS.find((command) => msg.text.includes(command)) || getCurrentState()[msg.from.id] === SupportStates.send_message_support) {
     return;
   }
   const userId = msg.from.id;

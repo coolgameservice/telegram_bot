@@ -9,7 +9,11 @@ const SupportStates = {
   send_message_support: "send_message_support",
 };
 
-let userState = {};
+const userState = {};
+
+function getCurrentState() {
+  return userState;
+}
 
 bot.on("callback_query", async (callbackQuery) => {
   if (callbackQuery.data === "support") {
@@ -45,28 +49,28 @@ bot.on("callback_query", async (callbackQuery) => {
     let replyMarkup;
     const startInfo = await fetchSectionInfo("start");
     if (await checkUserBanned(callbackQuery.from.id)) {
-        replyMarkup = keyboards.StartKeyboardForBannedUser.keyboard;
+      replyMarkup = keyboards.StartKeyboardForBannedUser.keyboard;
     } else {
-        replyMarkup = getStartKeyboard(callbackQuery.from.id);
+      replyMarkup = getStartKeyboard(callbackQuery.from.id);
     }
     await bot.editMessageMedia(
-        {
-          type: "photo",
-          media: startInfo.img_id,
-          caption: startInfo.content,
-        },
-        {
-          chat_id: callbackQuery.message.chat.id,
-          message_id: callbackQuery.message.message_id,
-          reply_markup: replyMarkup,
-        }
-      );
+      {
+        type: "photo",
+        media: startInfo.img_id,
+        caption: startInfo.content,
+      },
+      {
+        chat_id: callbackQuery.message.chat.id,
+        message_id: callbackQuery.message.message_id,
+        reply_markup: replyMarkup,
+      }
+    );
   }
 });
 
 bot.on("message", async (msg) => {
   if (userState[msg.from.id] === SupportStates.send_message_support) {
-    if(msg.text === '/start') {
+    if (msg.text === "/start") {
       delete userState[msg.from.id];
       return;
     }
@@ -80,3 +84,8 @@ bot.on("message", async (msg) => {
     );
   }
 });
+
+module.exports = {
+  SupportStates,
+  getCurrentState,
+};
