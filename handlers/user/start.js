@@ -126,7 +126,7 @@ function upsertUserData(userData, userId) {
 }
 
 async function initUserInBot(userToken, userId, userName) {
-  const body = { user_token: userToken, user_name: userName };
+  const body = { user_token: userToken, user_name: userName, user_id: userId };
 
   try {
     const response = await axios.post(config.WEBSITE_WEBHOOK_URL, body);
