@@ -4,7 +4,13 @@
   "description": "",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "pm2 start bot.js --name 'coolgameservice_bot'",
+    "stop": "pm2 stop coolgameservice_bot",
+    "restart": "pm2 restart coolgameservice_bot",
+    "status": "pm2 status",
+    "delete": "pm2 delete coolgameservice_bot",
+    "save": "pm2 save",
+    "log": "pm2 logs coolgameservice_bot"
   },
   "keywords": [],
   "author": "",
